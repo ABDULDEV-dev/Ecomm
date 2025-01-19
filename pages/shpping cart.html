@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="../CSS/stylr.css"
+</head>
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+    </header>
+    <main>
+        <div id="cart-items"></div>
+        <div id="cart-total"></div>
+    </main>
+    <footer>
+        <ul class="footer-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="#category">Category</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="#me">Me</a></li>
+        </ul>
+    </footer>
+    <script>
+        let cart = [];
+
+        function loadCart() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                displayCart();
+            }
+        }
+
+        function displayCart() {
+            const cartItemsElement = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            cartItemsElement.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <span>${item.name} - $${item.price.toFixed(2)}</span>
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity(${index}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${index}, 1)">+</button>
+                    </div>
+                `;
+                cartItemsElement.appendChild(itemElement);
+                total += item.price * item.quantity;
+            });
+
+            cartTotalElement.textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        window.onload = loadCart;
+    </script>
+</body>
+</html>
+

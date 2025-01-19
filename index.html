@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple E-commerce Site</title>
+    <link rel="stylesheet" href="./CSS/stylr.css">
+    <style>
+      
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Simple E-commerce Site</h1>
+    </header>
+    <main>
+        <div class="product-grid">
+            <div class="product-card">
+                <h3>Product 1</h3>
+                <p>$19.99</p>
+                <button onclick="addToCart('Product 1', 19.99)">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <h3>Product 2</h3>
+                <p>$24.99</p>
+                <button onclick="addToCart('Product 2', 24.99)">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <h3>Product 3</h3>
+                <p>$14.99</p>
+                <button onclick="addToCart('Product 3', 14.99)">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <h3>Product 4</h3>
+                <p>$29.99</p>
+                <button onclick="addToCart('Product 4', 29.99)">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#category">Category</a></li>
+            <li><a href="./pages/shpping cart.html">Cart<span id="cart-count">0</span></a></li>
+            <li><a href="#me">Me</a></li>
+        </ul>
+    </footer>
+    <script>
+        let cart = [];
+
+        function addToCart(productName, price) {
+            const existingItem = cart.find(item => item.name === productName);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name: productName, price: price, quantity: 1 });
+            }
+            updateCartCount();
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateCartCount() {
+            const cartCountElement = document.getElementById('cart-count');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCountElement.textContent = totalItems;
+        }
+
+        // Load cart from localStorage on page load
+        window.onload = function() {
+            const savedCart = localStorage.getItem('shoppingcart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartCount();
+            }
+        };
+    </script>
+</body>
+</html>
+
